@@ -1,7 +1,9 @@
 package com.afourathon.cabmanagementapp.service.implementation;
 
 import com.afourathon.cabmanagementapp.exception.ResourceNotFoundException;
+import com.afourathon.cabmanagementapp.model.Cab;
 import com.afourathon.cabmanagementapp.model.Driver;
+import com.afourathon.cabmanagementapp.repository.CabRepository;
 import com.afourathon.cabmanagementapp.repository.DriverRepository;
 import com.afourathon.cabmanagementapp.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,12 @@ import java.util.Optional;
 public class DriverServiceImpl implements DriverService {
 
     private final DriverRepository driverRepository;
+    private final CabRepository cabRepository;
 
     @Autowired
-    public DriverServiceImpl(DriverRepository driverRepository) {
+    public DriverServiceImpl(DriverRepository driverRepository, CabRepository cabRepository) {
         this.driverRepository = driverRepository;
+        this.cabRepository = cabRepository;
     }
 
     @Override
@@ -67,5 +71,25 @@ public class DriverServiceImpl implements DriverService {
         );
         driverRepository.deleteById(driverId);
         return true;
+    }
+
+    @Override
+    public Driver assignedCab(Long driverId, Long cabId) {
+        Driver driver = driverRepository.findById(driverId).orElseThrow(
+                () -> new ResourceNotFoundException("Driver not exist with id:" + driverId));
+        Cab cab = cabRepository.findById(cabId).orElseThrow(()->
+                new ResourceNotFoundException("Driver not exist with id:" + cabId));
+        driver.setCab(cab);
+        driverRepository.save(driver);
+        return driver;
+    }
+
+    @Override
+    public Driver unassignedCab(Long driverId) {
+        Driver driver = driverRepository.findById(driverId).orElseThrow(
+                () -> new ResourceNotFoundException("Driver not exist with id:" + driverId));
+        driver.setCab(null);
+        driverRepository.save(driver);
+        return driver;
     }
 }

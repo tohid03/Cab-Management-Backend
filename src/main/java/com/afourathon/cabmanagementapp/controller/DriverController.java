@@ -1,5 +1,6 @@
 package com.afourathon.cabmanagementapp.controller;
 
+import com.afourathon.cabmanagementapp.model.Cab;
 import com.afourathon.cabmanagementapp.model.Driver;
 import com.afourathon.cabmanagementapp.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,16 @@ public class DriverController {
     public ResponseEntity<Boolean> deleteDriver(@PathVariable long id) {
         boolean flag = driverService.deleteDriver(id);
         return new ResponseEntity<>(flag, HttpStatus.OK);
+    }
+
+    @PutMapping("/drivers/{driverId}/cab/{cabId}")
+    public ResponseEntity<Driver> addDriverToCab(@PathVariable Long driverId, @PathVariable Long cabId){
+        Driver driver = driverService.assignedCab(cabId,driverId);
+        return new ResponseEntity<>(driver,HttpStatus.CREATED);
+    }
+    @DeleteMapping("/drivers/unassignedCab/{driverId}")
+    public ResponseEntity<Driver> removeCabDriver(@PathVariable Long driverId){
+        driverService.unassignedCab(driverId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

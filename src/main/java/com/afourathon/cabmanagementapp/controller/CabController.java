@@ -1,7 +1,6 @@
 package com.afourathon.cabmanagementapp.controller;
 
 import com.afourathon.cabmanagementapp.model.Cab;
-import com.afourathon.cabmanagementapp.model.Driver;
 import com.afourathon.cabmanagementapp.service.CabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,12 +44,12 @@ public class CabController {
     }
     @PutMapping("/cabs/{cabId}/driver/{driverId}")
     public ResponseEntity<Cab> addDriverToCab(@PathVariable Long cabId, @PathVariable Long driverId){
-    Cab cab = cabService.updateDriverCab(cabId,driverId);
+    Cab cab = cabService.assignedDriver(cabId,driverId);
     return new ResponseEntity<>(cab,HttpStatus.CREATED);
     }
-    @PutMapping("/cabs/removeCabDriver/{cabId}")
+    @DeleteMapping("/cabs/unassignedDriver/{cabId}")
     public ResponseEntity<?> removeCabDriver(@PathVariable Long cabId){
-        cabService.removeCabDriver(cabId);
+        cabService.unassignedDriver(cabId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

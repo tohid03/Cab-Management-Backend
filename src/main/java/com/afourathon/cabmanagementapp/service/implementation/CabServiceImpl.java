@@ -66,7 +66,7 @@ public class CabServiceImpl implements CabService {
     }
 
     @Override
-    public Cab updateDriverCab(Long cabId, Long driverId) {
+    public Cab assignedDriver(Long cabId, Long driverId){
         Cab cab = cabRepository.findById(cabId).orElseThrow(
                 ()-> new ResourceNotFoundException("Cab not exist with id:"+ cabId)
         );
@@ -79,7 +79,7 @@ public class CabServiceImpl implements CabService {
     }
 
     @Override
-    public void removeCabDriver(Long cabId) {
+    public void unassignedDriver(Long cabId) {
         Cab cab = cabRepository.findById(cabId).orElseThrow(()-> new ResourceNotFoundException("Cab not exist with id:"+ cabId));
         cab.setDriver(null);
         cabRepository.save(cab);

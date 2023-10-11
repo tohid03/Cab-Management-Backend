@@ -15,4 +15,7 @@ public interface DriverService{
 
     boolean deleteDriver(Long driverId);
 
+    Driver assignedCab(Long driverId,Long cabId);
+    Driver unassignedCab(Long driverId);
+
 }

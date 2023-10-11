@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 
 @ControllerAdvice
@@ -35,5 +36,13 @@ public class ApiExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now());
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<Object> handleApiRequest(SQLException sqlException){
+        ApiException apiException = new ApiException(sqlException.getMessage(),
+                sqlException,
+                HttpStatus.BAD_REQUEST,
+                ZonedDateTime.now());
+        return  new ResponseEntity<>(apiException,HttpStatus.BAD_REQUEST);
     }
 }
